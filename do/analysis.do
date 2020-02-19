@@ -31,11 +31,11 @@ tw ///
 // Anemia
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
-  (lpoly ha57 hh_ses , lw(thick)) ///
-  (lpoly hb57 hh_ses , lw(thick)) ///
-  (lpoly hc57 hh_ses , lw(thick) ) ///
+  (lpoly anemia hh_ses if ha57 != ., lw(thick)) ///
+  (lpoly anemia hh_ses if hb57 != ., lw(thick)) ///
+  (lpoly anemia hh_ses if hc57 != ., lw(thick) ) ///
 , ${hist_opts} ytit(" ") xtit("HH SES") ///
-  title("Anemia") yscale(reverse) ///
+  title("Moderate or Severe Anemia") ///
   legend(on order(2 "Women" 3 "Men" 4 "Children"))
 
   graph export "${directory}/outputs/ses_anemia.eps" , replace
