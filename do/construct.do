@@ -1,6 +1,6 @@
 // Construct individual-level records
 
-// Get HIV results
+// Get HIV results -------------------------------------------------------------
 
 use "${directory}/data/AR72.dta" , clear
   duplicates drop hiv01, force // 5 duplicates pairs, all negative results
@@ -10,15 +10,15 @@ use "${directory}/data/AR72.dta" , clear
   tempfile hiv
   save `hiv'
 
-// Open individual records
+// Open individual records -----------------------------------------------------
 use "${directory}/data/PR74.dta" , clear
   merge m:1 hv001 hv002 hvidx using `hiv' , nogen
 
-// Generate new SES variable
+// Generate new SES variable ---------------------------------------------------
 pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv242 hv243a hv243b hv243c hv247
   predict hh_ses
 
-// Check BP
+// Check BP --------------------------------------------------------------------
   // https://www.nice.org.uk/guidance/ng136/chapter/Recommendations#diagnosing-hypertension
   egen bp_sys = rowmin(shb??s)
   egen bp_dia = rowmin(shb2?d)
@@ -26,7 +26,7 @@ pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv242 hv243a hv243b hv243c h
   gen bp_high = (bp_sys > 140) if !missing(bp_sys)
     lab var bp_high "High BP (Measured)"
 
-// Generate derived conditions
+// Generate derived conditions -------------------------------------------------
   gen hiv = (hiv03 == 1)
     lab var hiv "HIV"
   gen anemia_raw = min(ha57,hb57,hc57)
@@ -39,13 +39,14 @@ pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv242 hv243a hv243b hv243c h
   gen bp_control = (shb19 == 1) & (bp_high == 1 | shb18 == 1)
     lab var bp_control "BP Diagnosed & Controlled"
 
-// Label existing raw variables
+// Label existing raw variables ------------------------------------------------
   lab var sh24 "TB (Self-Reported)"
   lab var shb18 "High BP (Told by Doctor)"
   lab var shb19 "Taking BP Meds"
   lab var shb70 "Glucose Level"
 
-save "${directory}/constructed/individuals.dta" , replace
+// Save ------------------------------------------------------------------------
 
+save "${directory}/constructed/individuals.dta" , replace
 
 // End of dofile

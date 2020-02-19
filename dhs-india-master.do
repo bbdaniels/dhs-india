@@ -15,22 +15,22 @@ sysdir set PLUS "${directory}/ado/"
 
   // Options for -twoway- graphs
   global tw_opts ///
-  	title(, justification(left) color(black) span pos(11)) ///
-  	graphregion(color(white) lc(white) lw(med)) bgcolor(white) ///
-  	ylab(,angle(0) nogrid) xtit(,placement(left) justification(left)) ///
-  	yscale(noline) xscale(noline) legend(region(lc(none) fc(none)))
+    title(, justification(left) color(black) span pos(11)) ///
+    graphregion(color(white) lc(white) lw(med)) bgcolor(white) ///
+    ylab(,angle(0) nogrid) xtit(,placement(left) justification(left)) ///
+    yscale(noline) xscale(noline) legend(region(lc(none) fc(none)))
 
   // Options for -graph- graphs
   global graph_opts ///
-  	title(, justification(left) color(black) span pos(11)) ///
-  	graphregion(color(white) lc(white) lw(med)) bgcolor(white) ///
-  	ylab(,angle(0) nogrid) ytit(,placement(left) justification(left))  ///
-  	yscale(noline) legend(region(lc(none) fc(none)))
+    title(, justification(left) color(black) span pos(11)) ///
+    graphregion(color(white) lc(white) lw(med)) bgcolor(white) ///
+    ylab(,angle(0) nogrid) ytit(,placement(left) justification(left))  ///
+    yscale(noline) legend(region(lc(none) fc(none)))
 
   // Options for histograms
   global hist_opts ///
-  	ylab(, angle(0) axis(2)) yscale(off alt axis(2)) ///
-  	ytit(, axis(2)) ytit(, axis(1))  yscale(alt)
+    ylab(, angle(0) axis(2)) yscale(off alt axis(2)) ///
+    ytit(, axis(2)) ytit(, axis(1))  yscale(alt)
 
   // Useful stuff
 

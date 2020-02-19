@@ -3,7 +3,7 @@
 use "${directory}/constructed/individuals.dta" ///
   if hh_ses < 4.5 , clear // if hh_ses < 4.5
 
-// Glucose & Diabetes
+// Glucose & Diabetes ----------------------------------------------------------
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
   (lpoly glucose hh_ses , lw(thick)) ///
@@ -15,7 +15,7 @@ tw ///
 
   graph export "${directory}/outputs/ses_glucose.eps" , replace
 
-// Blood Pressure and Management
+// Blood Pressure and Management -----------------------------------------------
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
   (lpoly shb18 hh_ses , lw(thick)) ///
@@ -28,7 +28,7 @@ tw ///
 
   graph export "${directory}/outputs/ses_bp.eps" , replace
 
-// Anemia
+// Anemia ----------------------------------------------------------------------
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
   (lpoly anemia hh_ses if ha57 != ., lw(thick)) ///
@@ -40,7 +40,7 @@ tw ///
 
   graph export "${directory}/outputs/ses_anemia.eps" , replace
 
-// HIV
+// HIV -------------------------------------------------------------------------
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
   (lpoly hiv hh_ses if ha62 != "", lw(thick)) ///
@@ -51,7 +51,7 @@ tw ///
 
   graph export "${directory}/outputs/ses_hiv.eps" , replace
 
-// TB
+// TB --------------------------------------------------------------------------
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
   (lpoly sh24 hh_ses if hv104 == 2, lw(thick)) ///
@@ -61,23 +61,5 @@ tw ///
   legend(on order(2 "Women" 3 "Men"))
 
   graph export "${directory}/outputs/ses_tb.eps" , replace
-
--
-foreach var in sh24 hiv anemia_raw anemia shb18 bp_high glucose shb70 shb19 {
-
-  local title : var lab `var'
-
-  tw ///
-    (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
-    (lpoly `var' hh_ses , lw(thick)) ///
-  , ${hist_opts} ytit("Prevalence") xtit("HH SES") ///
-    title("`title'")
-
-    graph export "${directory}/outputs/ses_`var'.eps" , replace
-
-}
-
-
-
 
 // End of dofile
