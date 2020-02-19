@@ -38,7 +38,7 @@ sysdir set PLUS "${directory}/ado/"
   global numbering `""(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)""'
   global bar lc(white) lw(thin) la(center) fi(100) // ← Remove la(center) for Stata < 15
 
-
+-
 // Part 1: Load datafiles into Git location ----------------------------------------------------
 
   foreach type in HR74 PR74 AR72 IR74 MR74 {
