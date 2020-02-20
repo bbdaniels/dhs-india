@@ -22,7 +22,7 @@ tw ///
 , ${hist_opts} ytit(" " , ax(1)) ytit(" " , ax(3)) xtit("HH SES") ///
   title("Glucose and Diabetes") ///
   legend(on order(2 "Glucose > 125" 3 "Glucose Level")) ///
-  yscale(alt ax(1))
+  yscale(alt ax(1) r(0))
 
   graph export "${directory}/outputs/ses_glucose.eps" , replace
 
@@ -31,11 +31,11 @@ tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
   (lpoly shb18 hh_ses , lw(thick)) ///
   (lpoly bp_high hh_ses , lw(thick)) ///
-  (lpoly bp_control hh_ses , lw(thick) ) ///
+  (lpoly shb19 hh_ses , lw(thick) ) ///
 , ${hist_opts} ytit(" ") xtit("HH SES") ///
   title("High Blood Pressure and Treatment") ///
   legend(on c(1) pos(11) ring(0) order(2 "High BP (Told by Doctor)" 3 "High BP (Measured)" ///
-    4 "Diagnosed (Either) & Controlled"))
+    4 "Diagnosed (Either) & Controlled")) yscale(r(0))
 
   graph export "${directory}/outputs/ses_bp.eps" , replace
 
@@ -47,9 +47,20 @@ tw ///
   (lpoly anemia hh_ses if hc57 != ., lw(thick) ) ///
 , ${hist_opts} ytit(" ") xtit("HH SES") ///
   title("Moderate or Severe Anemia") ///
-  legend(on order(2 "Women" 3 "Men" 4 "Children"))
+  legend(on order(2 "Women" 3 "Men" 4 "Children")) yscale(r(0))
 
   graph export "${directory}/outputs/ses_anemia.eps" , replace
+
+tw ///
+  (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
+  (lpoly ha53 hh_ses , lw(thick)) ///
+  (lpoly hb53 hh_ses , lw(thick)) ///
+  (lpoly hc53 hh_ses , lw(thick) ) ///
+, ${hist_opts} ytit(" ") xtit("HH SES") ///
+  title("Hemoglobin Counts (for Anemia)") ///
+  legend(on order(2 "Women" 3 "Men" 4 "Children"))
+
+  graph export "${directory}/outputs/ses_anemia_hemoglobin.eps" , replace
 
 // HIV -------------------------------------------------------------------------
 tw ///
@@ -58,7 +69,7 @@ tw ///
   (lpoly hiv hh_ses if hb62 != "", lw(thick)) ///
 , ${hist_opts} ytit(" ") xtit("HH SES") ///
   title("HIV") ///
-  legend(on order(2 "Women" 3 "Men"))
+  legend(on order(2 "Women" 3 "Men")) yscale(r(0))
 
   graph export "${directory}/outputs/ses_hiv.eps" , replace
 
@@ -69,7 +80,7 @@ tw ///
   (lpoly sh24 hh_ses if hv104 == 1, lw(thick)) ///
 , ${hist_opts} ytit(" ") xtit("HH SES") ///
   title("Tuberculosis") ///
-  legend(on order(2 "Women" 3 "Men"))
+  legend(on order(2 "Women" 3 "Men")) yscale(r(0))
 
   graph export "${directory}/outputs/ses_tb.eps" , replace
 

@@ -15,7 +15,7 @@ use "${directory}/data/PR74.dta" , clear
   merge m:1 hv001 hv002 hvidx using `hiv' , nogen
 
 // Generate new SES variable ---------------------------------------------------
-pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv242 hv243a hv243b hv243c hv247
+pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv243a hv243b hv243c hv247
   predict hh_ses
 
 // Check BP --------------------------------------------------------------------
@@ -27,13 +27,14 @@ pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv242 hv243a hv243b hv243c h
     lab var bp_high "High BP (Measured)"
 
 // Generate derived conditions -------------------------------------------------
-  gen hiv = (hiv03 == 1)
+  gen hiv = (hiv03 == 1) if !missing(hiv03)
     lab var hiv "HIV"
-  gen anemia_raw = min(ha57,hb57,hc57)
+  gen anemia_raw = min(ha57,hb57,hc57) ///
+    if !(missing(ha57) & missing(hb57) & missing(hc57))
     lab var anemia_raw "Anemia Level (Lowest = Worst)"
-  gen anemia = (anemia_raw < 3)
+  gen anemia = (anemia_raw < 3) if !missing(anemia_raw)
     lab var anemia "Moderate or Severe Anemia"
-  gen glucose = shb70 > 125
+  gen glucose = shb70 > 125 if !missing(shb70)
     lab var glucose "Glucose > 125"
 
   gen bp_control = (shb19 == 1) & (bp_high == 1 | shb18 == 1) ///
