@@ -8,6 +8,8 @@ global directory "/Users/bbdaniels/GitHub/dhs-india/"
 // Install packages ------------------------------------------------------------------------------
 sysdir set PLUS "${directory}/ado/"
 
+  ssc install forest , replace
+
 // Globals -------------------------------------------------------------------------------------
 
   // title

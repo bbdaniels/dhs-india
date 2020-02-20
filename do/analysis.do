@@ -3,6 +3,17 @@
 use "${directory}/constructed/individuals.dta" ///
   if hh_ses < 4.5 , clear // if hh_ses < 4.5
 
+// Summary ---------------------------------------------------------------------
+forest reg (miss_*) ///
+  , t(hh_ses) b bh
+
+  graph export "${directory}/outputs/ses_missingness.eps" , replace
+
+forest reg (glucose shb18 bp_high bp_control anemia hiv sh24) ///
+  , t(hh_ses) d b bh
+
+  graph export "${directory}/outputs/ses_summary.eps" , replace
+
 // Glucose & Diabetes ----------------------------------------------------------
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
