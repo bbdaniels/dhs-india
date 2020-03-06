@@ -7,12 +7,12 @@ use "${directory}/constructed/individuals.dta" ///
 forest reg (miss_*) ///
   , t(hh_ses) b bh
 
-  graph export "${directory}/outputs/ses_missingness.eps" , replace
+  graph export "${directory}/outputs/ses_missingness.pdf" , replace
 
 forest reg (glucose shb18 bp_high bp_control anemia hiv sh24) ///
   , t(hh_ses) d b bh
 
-  graph export "${directory}/outputs/ses_summary.eps" , replace
+  graph export "${directory}/outputs/ses_summary.pdf" , replace
 
 // Glucose & Diabetes ----------------------------------------------------------
 tw ///
@@ -24,7 +24,7 @@ tw ///
   legend(on order(2 "Glucose > 125" 3 "Glucose Level")) ///
   yscale(alt ax(1) r(0))
 
-  graph export "${directory}/outputs/ses_glucose.eps" , replace
+  graph export "${directory}/outputs/ses_glucose.pdf" , replace
 
 // Blood Pressure and Management -----------------------------------------------
 tw ///
@@ -37,7 +37,7 @@ tw ///
   legend(on c(1) pos(11) ring(0) order(2 "High BP (Told by Doctor)" 3 "High BP (Measured)" ///
     4 "Diagnosed (Either) & Controlled")) yscale(r(0))
 
-  graph export "${directory}/outputs/ses_bp.eps" , replace
+  graph export "${directory}/outputs/ses_bp.pdf" , replace
 
 // Anemia ----------------------------------------------------------------------
 tw ///
@@ -49,7 +49,7 @@ tw ///
   title("Moderate or Severe Anemia") ///
   legend(on order(2 "Women" 3 "Men" 4 "Children")) yscale(r(0))
 
-  graph export "${directory}/outputs/ses_anemia.eps" , replace
+  graph export "${directory}/outputs/ses_anemia.pdf" , replace
 
 tw ///
   (histogram hh_ses , yaxis(2) lw(none) fc(gs12) ) ///
@@ -60,7 +60,7 @@ tw ///
   title("Hemoglobin Counts (for Anemia)") ///
   legend(on order(2 "Women" 3 "Men" 4 "Children"))
 
-  graph export "${directory}/outputs/ses_anemia_hemoglobin.eps" , replace
+  graph export "${directory}/outputs/ses_anemia_hemoglobin.pdf" , replace
 
 // HIV -------------------------------------------------------------------------
 tw ///
@@ -71,7 +71,7 @@ tw ///
   title("HIV") ///
   legend(on order(2 "Women" 3 "Men")) yscale(r(0))
 
-  graph export "${directory}/outputs/ses_hiv.eps" , replace
+  graph export "${directory}/outputs/ses_hiv.pdf" , replace
 
 // TB --------------------------------------------------------------------------
 tw ///
@@ -82,6 +82,6 @@ tw ///
   title("Tuberculosis") ///
   legend(on order(2 "Women" 3 "Men")) yscale(r(0))
 
-  graph export "${directory}/outputs/ses_tb.eps" , replace
+  graph export "${directory}/outputs/ses_tb.pdf" , replace
 
 // End of dofile
