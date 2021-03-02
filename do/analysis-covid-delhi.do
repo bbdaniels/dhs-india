@@ -14,6 +14,7 @@ use "${directory}/data/IR74.dta" if v024 == 25, clear
 use "${directory}/data/MR74.dta" if mv024 == 25, clear
   clonevar DHSCLUST = mv001
   gen smokes = 1-mv463z
+
   clonevar hv002 = mv002
   keep smokes DHSCLUST hv002
   gen male = 1
@@ -38,7 +39,7 @@ use "${directory}/constructed/individuals.dta" if hv024 == 25, clear
   collapse (sum) age bp2 male smokes (firstnm) hh_ses (count) n = male, by(DHSCLUST hv002)
 
   gen risk = 2*age + bp2 + smokes + male
--
+
 // Get biomarker and age data from all-persons
 use "${directory}/constructed/individuals.dta" if hv024 == 25, clear
   clonevar DHSCLUST = hv001
@@ -46,7 +47,9 @@ use "${directory}/constructed/individuals.dta" if hv024 == 25, clear
   gen age = (hml16 >= 65)
   gen bp2 = (bp == 1 | bp_high == 1) if (!missing(bp) | !missing(bp_high))
 
-  collapse (mean) age bp2 male (count) n = male, by(DHSCLUST)
+  collapse (mean) age bp2 male hh_ses (count) n = male bp_n = bp2 ///
+    (sum) age_count = age bp_count = bp2 male_count = male ///
+    , by(DHSCLUST)
   merge 1:1 DHSCLUST using `gis' , keep(3) nogen
 
   save `gis' , replace
@@ -74,7 +77,7 @@ use "${directory}/constructed/gps-db.dta" , clear
      , yscale(off axis(2)) ylab(0 "0%" 20 "5%" 40 "10%" 60 "15%") ///
        xscale(noline) yscale(noline) ytit("Share of clusters") ///
        xtit("Cluster-wide average risk score")
-
+-
        graph export "/users/bbdaniels/desktop/delhi-risk.png" , width(2000) replace
 -
   // KML
