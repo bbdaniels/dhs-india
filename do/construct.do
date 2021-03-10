@@ -39,6 +39,8 @@ pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv243a hv243b hv243c hv247
   clonevar bp = shb18
   clonevar bp_med = shb19
   clonevar tb = sh24
+  gen age = hv105 if hv105 < 98
+    lab var age "Age"
 
 // Check BP --------------------------------------------------------------------
   // https://www.nice.org.uk/guidance/ng136/chapter/Recommendations#diagnosing-hypertension
@@ -54,6 +56,15 @@ pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv243a hv243b hv243c hv247
     lab var bp_control "Low BP if Told"
   gen bp_nocontrol = (bp_high == 1) if (bp == 1) & (!missing(bp) & !missing(bp_high))
     lab var bp_nocontrol "High BP if Told"
+    
+  gen bp_cat = .
+    lab def bp_cat 1 "Undiagnosed" 2 "Uncontrolled" 3 "Controlled" 4 "Normal"
+    lab val bp_cat bp_cat
+    lab var bp_cat "BP Category"
+    replace bp_cat = 1 if shb18 == 0 & bp_high == 1
+    replace bp_cat = 2 if shb18 == 1 & bp_high == 1
+    replace bp_cat = 3 if shb18 == 1 & bp_high == 0
+    replace bp_cat = 4 if shb18 == 0 & bp_high == 0
 
 // Generate derived conditions -------------------------------------------------
   gen hiv = (hiv03 == 1) if !missing(hiv03)
