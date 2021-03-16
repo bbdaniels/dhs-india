@@ -43,7 +43,41 @@ use "${directory}/constructed/individuals.dta" ///
               3 "Controlled:" ///
                 0 "Warned, but" 0 "Measured <140" ))
     
-      graph export "${directory}/outputs/bp-paper/f-bp-age-male.png" , replace
+      graph export "${directory}/outputs/bp-paper/f-bp-male.png" , replace
+      restore, not
+      
+// BP detection and treatment by Gender along Age
+
+use "${directory}/constructed/individuals.dta" ///
+  if !missing(shb18) , clear
+    
+  xtile ses = hh_ses , n(100)
+  
+  tab bp_cat, gen(bp_cat)
+    replace bp_cat2 = bp_cat3 + bp_cat2
+    replace bp_cat1 = bp_cat1 + bp_cat2
+    
+  preserve
+    collapse (mean) bp_cat?  , by(male ses) fast
+      
+    tw ///
+      (area bp_cat1 ses , lw(none) fc("73 70 68")) ///
+      (area bp_cat2 ses , lw(none) fc("219 112 41")) ///
+      (area bp_cat3 ses , lw(none) fc("24 105 109")) ///
+    , by( male , ixaxes ///
+          legend(pos(3)  size(small) ) ///
+          note(" ") c(1) ) ///
+      xtit("    Socioeconomic Status Percentile {&rarr}" , placement(left)) xlab(0 "1st" 50 "Median SES" 100 "99th")  ///
+      ylab(0 "0%" .1 "10%" .2 "20%") ///
+      legend(region(lc(none)) c(1) symxsize(small) symysize(small) ///
+        order(1 "Undiagnosed:" ///
+                0 "Not warned, and" 0 "Measured >140" 0 " " ////
+              2 "Uncontrolled:" ///
+                0 "Warned, but" 0 "Measured >140" 0 " " ///
+              3 "Controlled:" ///
+                0 "Warned, but" 0 "Measured <140" ))
+    
+      graph export "${directory}/outputs/bp-paper/f-bp-ses.png" , replace
       restore, not
 
 // BP detection and treatment by Age/Gender along SES
