@@ -50,6 +50,9 @@ pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv243a hv243b hv243c hv247
   drop shb12d
   egen bp_sys = rowmean(shb??s)
   egen bp_dia = rowmean(shb??d)
+  
+  replace bp_sys = . if bp_sys > 260 | bp_sys < 50 // Lethal BP, measurement issues
+  replace bp_dia = . if bp_dia > 180 | bp_dia < 30 // Lethal BP, measurement issues
 
   gen bp_high = (bp_sys >= 140 | bp_dia >= 90) ///
     if !missing(bp_sys) & !missing(bp_dia)
