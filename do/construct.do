@@ -13,6 +13,9 @@ use "${directory}/data/AR72.dta" , clear
 // Open individual records -----------------------------------------------------
 use "${directory}/data/PR74.dta" , clear
   merge m:1 hv001 hv002 hvidx using `hiv' , nogen
+  
+  gen wgt = hv005/1000000
+    lab var wgt "Sample Weight"
 
 // Generate new SES variable ---------------------------------------------------
 pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv243a hv243b hv243c hv247
@@ -44,10 +47,12 @@ pca hv206 hv207 hv208 hv209 hv210 hv211 hv212 hv221 hv243a hv243b hv243c hv247
 
 // Check BP --------------------------------------------------------------------
   // https://www.nice.org.uk/guidance/ng136/chapter/Recommendations#diagnosing-hypertension
-  egen bp_sys = rowmin(shb??s)
-  egen bp_dia = rowmin(shb2?d)
+  drop shb12d
+  egen bp_sys = rowmean(shb??s)
+  egen bp_dia = rowmean(shb??d)
 
-  gen bp_high = (bp_sys > 140) if !missing(bp_sys)
+  gen bp_high = (bp_sys >= 140 | bp_dia >= 90) ///
+    if !missing(bp_sys) & !missing(bp_dia)
     lab var bp_high "High BP (Measured)"
 
   gen bp_treat = (bp_med == 1) if (bp == 1) & (!missing(bp) & !missing(bp_med))
