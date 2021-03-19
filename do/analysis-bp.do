@@ -3,34 +3,40 @@
 use "${directory}/constructed/individuals.dta" ///
   if !missing(shb18) , clear
   
-  // pvenn shb18 shb19 bp_high , xscale(noline) yscale(noline)
+  preserve
+    keep if male == 1
+    pvenn shb18 shb19 bp_high , xscale(noline) yscale(noline)
+    graph save "${directory}/outputs/bp-paper/f-bp-venn-m.gph" , replace
+  restore
+  preserve
+    keep if male == 0
+    pvenn shb18 shb19 bp_high , xscale(noline) yscale(noline)
+    graph save "${directory}/outputs/bp-paper/f-bp-venn-f.gph" , replace
+    
     // Needs manual adjustments for final figure
-    // graph save "${directory}/outputs/bp-paper/f-bp-venn.gph" , replace
+    graph combine ///
+      "${directory}/outputs/bp-paper/f-bp-venn-f.gph" ///
+      "${directory}/outputs/bp-paper/f-bp-venn-m.gph" ///
+    , r(1)
+     
+     graph save "${directory}/outputs/bp-paper/f-bp-venn.gph" , replace
     // graph export "${directory}/outputs/bp-paper/f-bp-venn.png" , replace
     
-  tw ///
-    (histogram bp_sys if shb18 == 1 & bp_sys >= 50 ///
-      , s(50) w(10) gap(10) lc(none) fc(gray) frac) ///
-  , xtit("Measured Systolic Blood Pressure") xlab(60(20)240) xline(140) ///
-    ytit(" ") ylab(0 "0%" .05 "5%" .1 "10%" .15 "15%" .2 "20%" .25 "25%")
-    
-    graph export "${directory}/outputs/bp-paper/f-warned-histo.png" , replace
-
 // BP Definition
 
   use "${directory}/constructed/individuals.dta" ///
     if !missing(shb18) , clear
     
   histogram bp_sys ///
-  , s(53) w(1) gap(10) lc(none) fc(gray) frac  ///
-    xtit(" ") ytit(" xx ", color(white)) xscale(off) ///
+  , s(53) w(1) gap(10) lc(none) fc(gray) xline(140) frac  ///
+    xtit(" ") ytit(" xx ", color(white)) xscale(off range(50 260)) ///
     ylabel(0 .01 .02 .03 "100",labcolor(white)) fysize(20)
   
     graph save "${directory}/outputs/bp-paper/f-bp-sys.gph" , replace
   
   tw histogram bp_dia ///
-  , s(53) w(1) gap(10) lc(none) fc(gray) frac hor ///
-    xtit(" ") ytit(" ") yscale(off) ///
+  , s(53) w(1) gap(10) lc(none) fc(gray) yline(90) frac hor ///
+    xtit(" ") ytit(" ") ylab(30 60 90 120 150) yscale(off range(30 180)) ///
     xlabel(0 .01 .02 .03 ,labcolor(white)) fxsize(20)
     
     graph save "${directory}/outputs/bp-paper/f-bp-dia.gph" , replace
@@ -50,6 +56,7 @@ use "${directory}/constructed/individuals.dta" ///
       if bp_sys >= 140 & bp_dia >= 90 ///
       , m(.) msize(tiny) mc(red%1) lc(none)) ///
   , xlab(60 100 140 180 220) ylab(30 60 90 120 150) ///
+    xline(140) yline(90) xscale(range(50 260)) yscale(range(30 180)) ///
     xtit("Systolic Blood Pressure") ytit("Diastolic Blood Pressure") ///
     legend(on region(lc(none)) pos(11) ring(0) c(1) size(small) ///
       order(2 "Not Considered Hypertensive" ///
@@ -168,7 +175,7 @@ use "${directory}/constructed/individuals.dta" , clear
   xtile ses = hh_ses , n(100)
   
   preserve
-    collapse (mean) bp_un bp_di tb anemia glucose , by(male ses) fast
+    collapse (mean) bp_un bp_di tb anemia glucose [iweight=wgt], by(male ses) fast
       lab var bp_un "BP: Undiagnosed"
       lab var bp_di "BP: Diagnosed"
       lab var glucose "Glucose"
